@@ -31,12 +31,18 @@ class _GameScreenState extends State<GameScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  MajorMinorButton(buttonTitle: 'MINOR', onPressed: () {
-                    print('Minor');
-                  }),
-                  MajorMinorButton(buttonTitle: 'MAJOR', onPressed: () {
-                    print('Major');
-                  }),
+                  MajorMinorButton(
+                    buttonTitle: 'MINOR',
+                    onPressed: () {
+                      print('Minor');
+                    },
+                  ),
+                  MajorMinorButton(
+                    buttonTitle: 'MAJOR',
+                    onPressed: () {
+                      print('Major');
+                    },
+                  ),
                 ],
               ),
             ],
