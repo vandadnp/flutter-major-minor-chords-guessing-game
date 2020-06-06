@@ -34,6 +34,12 @@ class _GameScreenState extends State<GameScreen> {
     
   }
   
+  @override
+  void dispose() {
+    Chord.disposePlayer();
+    super.dispose();
+  }
+  
   void playRandomChord() {
     int chordIndex = _rnd.nextInt(chords.length);
     chords[chordIndex].play();

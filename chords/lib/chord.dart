@@ -2,7 +2,15 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 
 enum ChordType { Major, Minor }
 
+var _player = AssetsAudioPlayer.newPlayer();
+
 class Chord {
+  
+  static void disposePlayer() {
+    _player.stop();
+    _player.dispose();
+  }
+  
   final String fileName;
   final String name;
   final ChordType chordType;
@@ -13,7 +21,8 @@ class Chord {
   String path() => "$dir/$fileName";
 
   void play() {
-    AssetsAudioPlayer.newPlayer().open(
+    _player.stop();
+    _player.open(
       Audio(path()),
       autoStart: true,
       showNotification: false,
@@ -123,12 +132,12 @@ const chords = [
     chordType: ChordType.Minor,
   ),
   Chord(
-    fileName: "F#-major.wav",
+    fileName: "Fsharp-major.wav",
     name: "F# Major",
     chordType: ChordType.Major,
   ),
   Chord(
-    fileName: "F#-minor.wav",
+    fileName: "Fsharp-minor.wav",
     name: "F# Minor",
     chordType: ChordType.Minor,
   ),
