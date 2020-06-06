@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:chords/chord.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class GameScreen extends StatefulWidget {
   @override
@@ -9,10 +10,9 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  
   GameTimer timer;
   Random _rnd = Random();
-  
+
   @override
   void initState() {
     super.initState();
@@ -29,22 +29,21 @@ class _GameScreenState extends State<GameScreen> {
         print('ticker $value');
       },
     );
-    
+
     timer.start();
-    
   }
-  
+
   @override
   void dispose() {
     Chord.disposePlayer();
     super.dispose();
   }
-  
+
   void playRandomChord() {
     int chordIndex = _rnd.nextInt(chords.length);
     chords[chordIndex].play();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +62,10 @@ class _GameScreenState extends State<GameScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Spacer(flex: 2),
-              Text('🔊', style: TextStyle(fontSize: 100.0)),
+              Text(
+                '🔊',
+                style: TextStyle(fontSize: 100.0),
+              ),
               Spacer(
                 flex: 2,
               ),
@@ -95,17 +97,16 @@ class _GameScreenState extends State<GameScreen> {
 typedef Ticker = void Function(int);
 
 class GameTimer {
-  
   final VoidCallback started;
   final VoidCallback expired;
   final Ticker ticker;
   final int max;
-  
+
   Timer _timer;
   int _counter = 0;
 
   GameTimer({this.started, this.expired, this.ticker, this.max});
-  
+
   void start() {
     cancel();
     started();
@@ -121,7 +122,7 @@ class GameTimer {
       }
     });
   }
-  
+
   void cancel() {
     if (_timer != null) {
       _counter = 0;
