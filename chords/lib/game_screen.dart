@@ -10,13 +10,15 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  GameTimer timer;
+  GameTimer _timer;
   Random _rnd = Random();
+
+  Chord _currentChord;
 
   @override
   void initState() {
     super.initState();
-    timer = GameTimer(
+    _timer = GameTimer(
       max: 5,
       expired: () {
         print('expired');
@@ -30,7 +32,7 @@ class _GameScreenState extends State<GameScreen> {
       },
     );
 
-    timer.start();
+    _timer.start();
   }
 
   @override
@@ -41,8 +43,25 @@ class _GameScreenState extends State<GameScreen> {
 
   void playRandomChord() {
     int chordIndex = _rnd.nextInt(chords.length);
-    chords[chordIndex].play();
+    _currentChord = chords[chordIndex];
+    _currentChord.play();
   }
+
+  void processAnswer({@required ChordType chordType}) {
+    _timer.cancel();
+    if (chordType == _currentChord.chordType) {
+      // right answer
+      setState() {
+        _text = '✅';
+      }
+    } else {
+      setState(() {
+        _text = '❌';
+      });
+    }
+  }
+  
+  String _text = '🔊';
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +82,7 @@ class _GameScreenState extends State<GameScreen> {
             children: [
               Spacer(flex: 2),
               Text(
-                '🔊',
+                _text,
                 style: TextStyle(fontSize: 100.0),
               ),
               Spacer(
@@ -75,13 +94,13 @@ class _GameScreenState extends State<GameScreen> {
                   MajorMinorButton(
                     buttonTitle: 'MINOR',
                     onPressed: () {
-                      print('Minor');
+                      processAnswer(chordType: ChordType.Minor);
                     },
                   ),
                   MajorMinorButton(
                     buttonTitle: 'MAJOR',
                     onPressed: () {
-                      print('Major');
+                      processAnswer(chordType: ChordType.Major);
                     },
                   ),
                 ],
