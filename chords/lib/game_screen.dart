@@ -21,14 +21,13 @@ class _GameScreenState extends State<GameScreen> {
     _timer = GameTimer(
       max: 5,
       expired: () {
-        print('expired');
+        // expired we don't need it right now
       },
       started: () {
-        print('started');
         playRandomChord();
       },
       ticker: (value) {
-        print('ticker $value');
+        // ticker value for debugging purposes
       },
     );
 
@@ -38,19 +37,16 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void dispose() {
     Chord.disposePlayer();
+    _timer.cancel();
     super.dispose();
   }
 
   void playRandomChord() {
     int chordIndex = _rnd.nextInt(chords.length);
-    print(chordIndex);
     _currentChord = chords[chordIndex];
     _currentChord.play();
   }
   
-  Future<void> waitAfterAnswer({VoidCallback completed}) async =>
-    Future.delayed(Duration(seconds: 1), completed);
-
   processAnswer({ChordType chordType}) async {
     _timer.cancel();
     bool isCorrectAnswer = (chordType == _currentChord.chordType);
@@ -58,7 +54,7 @@ class _GameScreenState extends State<GameScreen> {
       _text = isCorrectAnswer ? '✅' : '❌';
     });
 
-    await waitAfterAnswer(completed: () {
+    await Future.delayed(Duration(seconds: 1), () {
       setState(() {
         _text = '🔊';
       });
