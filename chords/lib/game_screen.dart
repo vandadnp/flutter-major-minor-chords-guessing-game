@@ -43,22 +43,27 @@ class _GameScreenState extends State<GameScreen> {
 
   void playRandomChord() {
     int chordIndex = _rnd.nextInt(chords.length);
+    print(chordIndex);
     _currentChord = chords[chordIndex];
     _currentChord.play();
   }
+  
+  Future<void> waitAfterAnswer({VoidCallback completed}) async =>
+    Future.delayed(Duration(seconds: 1), completed);
 
-  void processAnswer({@required ChordType chordType}) {
+  processAnswer({ChordType chordType}) async {
     _timer.cancel();
-    if (chordType == _currentChord.chordType) {
-      // right answer
-      setState() {
-        _text = '✅';
-      }
-    } else {
+    bool isCorrectAnswer = (chordType == _currentChord.chordType);
+    setState(() {
+      _text = isCorrectAnswer ? '✅' : '❌';
+    });
+
+    await waitAfterAnswer(completed: () {
       setState(() {
-        _text = '❌';
+        _text = '🔊';
       });
-    }
+      playRandomChord();
+    });
   }
   
   String _text = '🔊';
@@ -93,14 +98,14 @@ class _GameScreenState extends State<GameScreen> {
                 children: <Widget>[
                   MajorMinorButton(
                     buttonTitle: 'MINOR',
-                    onPressed: () {
-                      processAnswer(chordType: ChordType.Minor);
+                    onPressed: () async {
+                      await processAnswer(chordType: ChordType.Minor);
                     },
                   ),
                   MajorMinorButton(
                     buttonTitle: 'MAJOR',
-                    onPressed: () {
-                      processAnswer(chordType: ChordType.Major);
+                    onPressed: () async {
+                      await processAnswer(chordType: ChordType.Major);
                     },
                   ),
                 ],

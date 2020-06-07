@@ -8,7 +8,6 @@ class Chord {
   
   static void disposePlayer() {
     _player.stop();
-    _player.dispose();
   }
   
   final String fileName;
