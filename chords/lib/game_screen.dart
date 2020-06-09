@@ -58,7 +58,7 @@ class _GameScreenState extends State<GameScreen> {
       setState(() {
         _text = '🔊';
       });
-      playRandomChord();
+      _timer.start();
     });
   }
   
